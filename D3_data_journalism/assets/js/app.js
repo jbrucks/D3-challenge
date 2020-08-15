@@ -199,16 +199,22 @@ d3.csv("assets/data/data.csv").then(function(stateData, err) {
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
     .attr("r", 15)
     .attr("fill", "blue")
-    .attr("opacity", ".15");
+    .attr("opacity", ".15")
+    .text(function(data) {
+      return data.abbr;
+    });
 
   // append initial text
-  var textGroup = chartGroup.selectAll("text")
+  var textGroup = chartGroup.selectAll(".stateText")
     .data(stateData)
     .enter()
     .append("text")
+    .classed('stateText', true)
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
-    .text(d => d.abbr);
+    .attr("dy", 3)
+    .attr('font-size', '15px')
+    .text(function(d){return d.abbr});
     
   // Create group for three x-axis labels
   var xlabelsGroup = chartGroup.append("g")
@@ -265,6 +271,9 @@ d3.csv("assets/data/data.csv").then(function(stateData, err) {
     .attr("value", "healthcare") // value to grab for event listener
     .classed("inactive", true)
     .text("Lacks Healthcare (%)");
+  
+  var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
+  var circlesGroup = updateToolTip(chosenYAxis, circlesGroup);
 
   // x axis labels event listener
   xlabelsGroup.selectAll("text")
@@ -357,7 +366,7 @@ d3.csv("assets/data/data.csv").then(function(stateData, err) {
         textGroup = renderTextY(textGroup, yLinearScale, chosenYAxis);
 
         // updates tooltips with new info
-        // circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
+        circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
         // changes classes to change bold text
         if (chosenYAxis === "obesity") {
