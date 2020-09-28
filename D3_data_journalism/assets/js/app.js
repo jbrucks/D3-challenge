@@ -131,14 +131,26 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     label = "Age (Median):";
   } 
   else {
-    label = "Household Income (Median):";
+    label = "Income (Median):";
+  }
+
+  var label2;
+
+  if (chosenYAxis === "obesity") {
+    label2 = "Obesity (%):";
+  } 
+  else if (chosenYAxis === "smokes") {
+    label2 = "Smokes (%):";
+  } 
+  else {
+    label2 = "Healthcare (%):";
   }
 
   var toolTip = d3.tip()
     .attr("class", "tooltip")
     .offset([80, -60])
     .html(function(d) {
-      return (`${d.state}<br>${label} ${d[chosenXAxis]}`);
+      return (`${d.state}<br>${label} ${d[chosenXAxis]}<br>${label2} ${d[chosenYAxis]}`);
     });
 
   circlesGroup.call(toolTip);
